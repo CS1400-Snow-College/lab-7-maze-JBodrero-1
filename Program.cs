@@ -1,6 +1,6 @@
 ﻿//  Jonathan Bodrero
 //  Jul 3, 2025
-//  Lab 8:  Maze 1
+//  Lab 7:  Maze 1
 
 using System.Diagnostics;  //  Allows stopwatch functionality
 Stopwatch watch = new Stopwatch();
@@ -10,15 +10,33 @@ int locFromTop = 0;
 int proposedFromLeft = 0;
 int proposedFromTop = 0;
 
-string[] mapRows = File.ReadAllLines("map.txt");    //  Read in basic maze map
-//string[] mapRows = File.ReadAllLines("map2.txt");    //  Read in a larger (taller) maze map
+
 
 //  Console.WriteLine($"Max wide = {maxWidth} max height = {maxHeight}");  Debugging code
 
 Console.Clear();        //  Give instructions
 Console.WriteLine("Welcome to our aMAZEing game.");
 Console.WriteLine("Use the arrow keys to move your character from start (top left) to the * symbol.");
-Console.WriteLine("To exit, press the Escape key. Press any key when ready to begin.");
+Console.WriteLine("To exit, press the Escape key.");
+Console.WriteLine("If you want a hard maze, press 'H' (and make sure your console is at least 16 lines tall), \notherwise press any other key and we'll give you an easy maze.");
+
+string[] mapRows;
+ConsoleKeyInfo levelIn = Console.ReadKey(true);      //  Read character
+if (char.ToUpper(levelIn.KeyChar) == 'H')
+{
+    mapRows = File.ReadAllLines("map2.txt");    //  Read in a larger (taller) maze map}
+    Console.WriteLine("Great, a hard maze!  Press any key when ready to begin.");
+}    
+else
+{
+    mapRows = File.ReadAllLines("map.txt"); ;//  Read in basic maze map
+    Console.WriteLine("Great, an easy maze!  Press any key when ready to begin.");
+}    
+
+
+
+
+
 Console.ReadKey(true);      //  Checks for key to start maze
 Console.Clear();        
 

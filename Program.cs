@@ -22,7 +22,7 @@ Console.WriteLine($"Max wide = {maxWidth} max height = {maxHeight}");
 Console.ReadKey(true);
 
 //  Start character at top left
-DrawMaze(locFromLeft, locFromTop);
+DrawMaze(locFromLeft, locFromTop, mapRows);
 Console.SetCursorPosition(0, 0);
 Console.Write("@");
 ConsoleKeyInfo keyIn;
@@ -43,39 +43,45 @@ do
         if (locFromLeft + 1 < maxWidth)
         {
             locFromLeft++;
-            DrawMaze(locFromLeft, locFromTop);
+            DrawMaze(locFromLeft, locFromTop, mapRows);
         }
-        
+
     }
     else if (keyIn.Key == ConsoleKey.LeftArrow) //&& (mazeChar != '#'))
     {
-        if (locFromLeft -1 >=0 )
+        if (locFromLeft - 1 >= 0)
         {
             locFromLeft--;
-            DrawMaze(locFromLeft, locFromTop);
+            DrawMaze(locFromLeft, locFromTop, mapRows);
         }
     }
     else if (keyIn.Key == ConsoleKey.UpArrow) //&& (mazeChar != '#'))
     {
-        if (locFromTop -1 >=0 )
+        if (locFromTop - 1 >= 0)
         {
             locFromTop--;
-            DrawMaze(locFromLeft, locFromTop);
+            DrawMaze(locFromLeft, locFromTop, mapRows);
         }
     }
     else if (keyIn.Key == ConsoleKey.DownArrow) //&& (mazeChar != '#'))
     {
-        if (locFromTop < maxHeight-1 )
+        if (locFromTop < maxHeight - 1)
         {
             locFromTop++;
-            DrawMaze(locFromLeft, locFromTop);
+            DrawMaze(locFromLeft, locFromTop, mapRows);
         }
+    }
+    if (mapRows[locFromTop] [locFromLeft] == '*')
+    {
+        Console.Clear();
+        Console.WriteLine("Congratulations!  You won!");
+        break;
     }
 }
 while (keyIn.Key != ConsoleKey.Escape);
 Console.CursorVisible = true;
 
-void DrawMaze(int fromLeft, int fromTop)
+static void DrawMaze(int fromLeft, int fromTop, string[] mapRows)
 {
     Console.Clear();
     foreach (string row in mapRows)
@@ -85,4 +91,9 @@ void DrawMaze(int fromLeft, int fromTop)
     }
     Console.SetCursorPosition(fromLeft, fromTop);
     Console.Write("@");
+}
+
+static void TryMove(int proposedLeft, int proposedTop, string[] mazeRows)
+{
+
 }

@@ -10,14 +10,15 @@ int locFromTop = 0;
 int proposedFromLeft = 0;
 int proposedFromTop = 0;
 
-string[] mapRows = File.ReadAllLines("map.txt");    //  Read in maze map
+string[] mapRows = File.ReadAllLines("map.txt");    //  Read in basic maze map
+//string[] mapRows = File.ReadAllLines("map2.txt");    //  Read in a larger (taller) maze map
 
 //  Console.WriteLine($"Max wide = {maxWidth} max height = {maxHeight}");  Debugging code
 
 Console.Clear();        //  Give instructions
 Console.WriteLine("Welcome to our aMAZEing game.");
-Console.WriteLine("Use the arrow keys to move your character from start (top left) to the * symbol.\n To exit, press the Escape key.");
-Console.WriteLine("Press any key when ready.");
+Console.WriteLine("Use the arrow keys to move your character from start (top left) to the * symbol.");
+Console.WriteLine("To exit, press the Escape key. Press any key when ready to begin.");
 Console.ReadKey(true);      //  Checks for key to start maze
 Console.Clear();        
 
@@ -25,9 +26,9 @@ Console.Clear();
 //  Start character at top left and draw maze
 DrawMaze(locFromLeft, locFromTop, mapRows);
 Console.SetCursorPosition(0, 0);
-Console.Write("@");
+Console.Write("@");     //  Mark character location.
 ConsoleKeyInfo keyIn;
-Console.CursorVisible = false;
+Console.CursorVisible = false;  //  Hide cursor for game play.
 watch.Start();      // Start watch
 do
 {
@@ -36,7 +37,6 @@ do
     if (keyIn.Key == ConsoleKey.Escape) //  If escape, quit game.
     {
         Console.WriteLine("Thanks for playing.  Goodbye.");
-        //Console.CursorVisible = true;
         break;
     }
     else if (keyIn.Key == ConsoleKey.RightArrow) //  Right arrow move

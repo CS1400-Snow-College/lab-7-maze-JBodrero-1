@@ -11,6 +11,8 @@ Console.Clear();
 
 int locFromLeft = 0;
 int locFromTop = 0;
+int proposedFromLeft = 0;
+int proposedFromTop = 0;
 //ConsoleKeyInfo input;
 //char mazeChar = ' ';
 
@@ -40,7 +42,9 @@ do
     }
     else if (keyIn.Key == ConsoleKey.RightArrow) //&& (mazeChar != '#'))
     {
-        if (locFromLeft + 1 < maxWidth)
+        proposedFromLeft = locFromLeft + 1;
+        proposedFromTop = locFromTop;
+        if (TryMove(proposedFromLeft, proposedFromTop, mapRows))
         {
             locFromLeft++;
             DrawMaze(locFromLeft, locFromTop, mapRows);
@@ -49,7 +53,9 @@ do
     }
     else if (keyIn.Key == ConsoleKey.LeftArrow) //&& (mazeChar != '#'))
     {
-        if (locFromLeft - 1 >= 0)
+        proposedFromLeft = locFromLeft - 1;
+        proposedFromTop = locFromTop;
+        if (TryMove(proposedFromLeft, proposedFromTop, mapRows))
         {
             locFromLeft--;
             DrawMaze(locFromLeft, locFromTop, mapRows);
@@ -57,7 +63,9 @@ do
     }
     else if (keyIn.Key == ConsoleKey.UpArrow) //&& (mazeChar != '#'))
     {
-        if (locFromTop - 1 >= 0)
+        proposedFromLeft = locFromLeft ;
+        proposedFromTop = locFromTop - 1;
+        if (TryMove(proposedFromLeft, proposedFromTop, mapRows))
         {
             locFromTop--;
             DrawMaze(locFromLeft, locFromTop, mapRows);
@@ -65,7 +73,9 @@ do
     }
     else if (keyIn.Key == ConsoleKey.DownArrow) //&& (mazeChar != '#'))
     {
-        if (locFromTop < maxHeight - 1)
+        proposedFromLeft = locFromLeft ;
+        proposedFromTop = locFromTop + 1;
+        if (TryMove(proposedFromLeft, proposedFromTop, mapRows))
         {
             locFromTop++;
             DrawMaze(locFromLeft, locFromTop, mapRows);
@@ -93,7 +103,22 @@ static void DrawMaze(int fromLeft, int fromTop, string[] mapRows)
     Console.Write("@");
 }
 
-static void TryMove(int proposedLeft, int proposedTop, string[] mazeRows)
+static bool TryMove(int proposedLeft, int proposedTop, string[] mapRows)
 {
+    int maxWidth = mapRows[0].Length;
+    int maxHeight = mapRows.Length;
+    if (proposedLeft < 0 || proposedLeft > maxWidth)
+    {
+        return false;
+    }
+    else if (proposedTop < 0 || proposedTop >= maxHeight - 1)
+    {
+        return false;
+    }
+    else if (mapRows[proposedTop][proposedLeft] == '#')//  Enforce walls.
+    {
+        return false;
+    }  
+    else { return true; }
 
 }

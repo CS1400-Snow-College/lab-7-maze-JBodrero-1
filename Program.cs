@@ -2,96 +2,97 @@
 //  Jul 3, 2025
 //  Lab 8:  Maze 1
 
-Console.Clear();
-Console.WriteLine("Welcome to our aMAZEing game.");
-Console.WriteLine("Use the arrow keys to move your character from top left to the * symbol.\n To exit, press Escape key.\n");
-Console.WriteLine("Press any key when ready.");
-Console.ReadKey(true);
-Console.Clear();
+using System.Diagnostics;  //  Allows stopwatch functionality
+Stopwatch watch = new Stopwatch();
 
-int locFromLeft = 0;
+int locFromLeft = 0;    //  Set location variables.
 int locFromTop = 0;
 int proposedFromLeft = 0;
 int proposedFromTop = 0;
-//ConsoleKeyInfo input;
-//char mazeChar = ' ';
+
+string[] mapRows = File.ReadAllLines("map.txt");    //  Read in maze map
+
+//  Console.WriteLine($"Max wide = {maxWidth} max height = {maxHeight}");  Debugging code
+
+Console.Clear();        //  Give instructions
+Console.WriteLine("Welcome to our aMAZEing game.");
+Console.WriteLine("Use the arrow keys to move your character from start (top left) to the * symbol.\n To exit, press the Escape key.");
+Console.WriteLine("Press any key when ready.");
+Console.ReadKey(true);      //  Checks for key to start maze
+Console.Clear();        
 
 
-string[] mapRows = File.ReadAllLines("map.txt");
-int maxWidth = mapRows[0].Length;
-int maxHeight = mapRows.Length;
-Console.WriteLine($"Max wide = {maxWidth} max height = {maxHeight}");
-Console.ReadKey(true);
-
-//  Start character at top left
+//  Start character at top left and draw maze
 DrawMaze(locFromLeft, locFromTop, mapRows);
 Console.SetCursorPosition(0, 0);
 Console.Write("@");
 ConsoleKeyInfo keyIn;
 Console.CursorVisible = false;
+watch.Start();      // Start watch
 do
 {
-    //DrawMaze(locFromTop, locFromLeft);
-    keyIn = Console.ReadKey(true);
+    keyIn = Console.ReadKey(true);      //  Read character
 
-    if (keyIn.Key == ConsoleKey.Escape)
+    if (keyIn.Key == ConsoleKey.Escape) //  If escape, quit game.
     {
         Console.WriteLine("Thanks for playing.  Goodbye.");
         //Console.CursorVisible = true;
         break;
     }
-    else if (keyIn.Key == ConsoleKey.RightArrow) //&& (mazeChar != '#'))
+    else if (keyIn.Key == ConsoleKey.RightArrow) //  Right arrow move
     {
         proposedFromLeft = locFromLeft + 1;
         proposedFromTop = locFromTop;
-        if (TryMove(proposedFromLeft, proposedFromTop, mapRows))
+        if (TryMove(proposedFromLeft, proposedFromTop, mapRows))    // Check valid move.
         {
             locFromLeft++;
             DrawMaze(locFromLeft, locFromTop, mapRows);
         }
-
     }
-    else if (keyIn.Key == ConsoleKey.LeftArrow) //&& (mazeChar != '#'))
+    else if (keyIn.Key == ConsoleKey.LeftArrow) //  Left arrow move
     {
         proposedFromLeft = locFromLeft - 1;
         proposedFromTop = locFromTop;
-        if (TryMove(proposedFromLeft, proposedFromTop, mapRows))
+        if (TryMove(proposedFromLeft, proposedFromTop, mapRows))    // Check valid move.
         {
             locFromLeft--;
             DrawMaze(locFromLeft, locFromTop, mapRows);
         }
     }
-    else if (keyIn.Key == ConsoleKey.UpArrow) //&& (mazeChar != '#'))
+    else if (keyIn.Key == ConsoleKey.UpArrow) //  Up arrow move
     {
         proposedFromLeft = locFromLeft ;
         proposedFromTop = locFromTop - 1;
-        if (TryMove(proposedFromLeft, proposedFromTop, mapRows))
+        if (TryMove(proposedFromLeft, proposedFromTop, mapRows))    // Check valid move.
         {
             locFromTop--;
             DrawMaze(locFromLeft, locFromTop, mapRows);
         }
     }
-    else if (keyIn.Key == ConsoleKey.DownArrow) //&& (mazeChar != '#'))
+    else if (keyIn.Key == ConsoleKey.DownArrow) //  Down arrow move
     {
         proposedFromLeft = locFromLeft ;
         proposedFromTop = locFromTop + 1;
-        if (TryMove(proposedFromLeft, proposedFromTop, mapRows))
+        if (TryMove(proposedFromLeft, proposedFromTop, mapRows))    // Check valid move.
         {
             locFromTop++;
             DrawMaze(locFromLeft, locFromTop, mapRows);
         }
     }
-    if (mapRows[locFromTop] [locFromLeft] == '*')
+    if (mapRows[locFromTop] [locFromLeft] == '*')   //  Detect win.
     {
+        watch.Stop();   //  Stop watch and compute time to complete.
         Console.Clear();
-        Console.WriteLine("Congratulations!  You won!");
+        Console.WriteLine($"Congratulations!  You completed the maze in {watch.ElapsedMilliseconds/1000} seconds.");
         break;
     }
 }
-while (keyIn.Key != ConsoleKey.Escape);
-Console.CursorVisible = true;
+while (keyIn.Key != ConsoleKey.Escape); //  Play game while any key but escape
 
-static void DrawMaze(int fromLeft, int fromTop, string[] mapRows)
+Console.CursorVisible = true;   //  Make cursor visible in console after game.
+
+
+static void DrawMaze(int fromLeft, int fromTop, string[] mapRows)   //  Method to draw maze.
 {
     Console.Clear();
     foreach (string row in mapRows)
@@ -103,22 +104,22 @@ static void DrawMaze(int fromLeft, int fromTop, string[] mapRows)
     Console.Write("@");
 }
 
-static bool TryMove(int proposedLeft, int proposedTop, string[] mapRows)
+
+static bool TryMove(int proposedLeft, int proposedTop, string[] mapRows)  // Check if move is valid.
 {
     int maxWidth = mapRows[0].Length;
     int maxHeight = mapRows.Length;
-    if (proposedLeft < 0 || proposedLeft > maxWidth)
+    if (proposedLeft < 0 || proposedLeft > maxWidth)    //  If outside of width, do nothing
     {
         return false;
     }
-    else if (proposedTop < 0 || proposedTop >= maxHeight - 1)
+    else if (proposedTop < 0 || proposedTop >= maxHeight - 1)  //  If outside of height, do nothing
     {
         return false;
     }
     else if (mapRows[proposedTop][proposedLeft] == '#')//  Enforce walls.
     {
         return false;
-    }  
-    else { return true; }
-
+    }
+    else { return true; }   //  If valid move, proceed.
 }
